@@ -20,11 +20,11 @@ module SlackGame
     end
 
     def draw
-      decoded_matrix = encode(matrix)
+      encoded_matrix = encode(matrix)
       result = if last_update
-        @slack.chat_update(ts: last_update, channel: channel, text: decoded_matrix)
+        @slack.chat_update(ts: last_update, channel: channel, text: encoded_matrix)
       else
-        @slack.chat_postMessage(channel: channel, text: decoded_matrix, as_user: true)
+        @slack.chat_postMessage(channel: channel, text: encoded_matrix, as_user: true)
       end
       @last_update = result['ok'] ? result['ts'] : raise
     end
@@ -32,15 +32,15 @@ module SlackGame
     private
 
     def encode(matrix)
-      decoded = matrix.map { |l| line_decode(l) }
-      decoded.join("\n")
+      encoded = matrix.map { |l| line_encode(l) }
+      encoded.join("\n")
     end
 
-    def line_decode(line)
-      decoded_line = line.map do |t|
+    def line_encode(line)
+      encoded_line = line.map do |t|
         dot_emoji(t)
       end
-      decoded_line.join
+      encoded_line.join
     end
 
     def dot_emoji(id)
