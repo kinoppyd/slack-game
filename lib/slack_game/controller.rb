@@ -2,12 +2,14 @@ module SlackGame
   class Controller
 
     def self.inherited(subclass)
+      subclass.class_variable_set(:@@parsers, [])
+
       def subclass.command(command, pattern)
         parsers << InputParser.new(command, pattern)
       end
 
       def subclass.parsers
-        @@parsers ||= []
+        self.class_variable_get(:@@parsers)
       end
     end
 

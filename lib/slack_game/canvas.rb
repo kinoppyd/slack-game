@@ -4,12 +4,14 @@ module SlackGame
     attr_accessor :matrix
 
     def self.inherited(subclass)
+      subclass.class_variable_set(:@@dot, {})
+
       def subclass.dot(id, emoji)
-        dot_map[id] = emoji
+        self.dot_map[id] = emoji
       end
 
       def subclass.dot_map
-        @@dot ||= {}
+        self.class_variable_get(:@@dot)
       end
     end
 
