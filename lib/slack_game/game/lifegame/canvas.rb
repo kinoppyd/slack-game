@@ -6,7 +6,7 @@ module SlackGame
         DEAD  = 1
 
         dot ARIVE, ENV['LIFE_ALIVE']
-        dot DEAD, ':spacer:'
+        dot DEAD, ENV['DEFAULT_SPACER'] || ':spacer:'
       end
     end
   end
