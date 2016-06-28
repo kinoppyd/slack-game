@@ -19,8 +19,10 @@ module SlackGame
     end
 
     def init
-      slack = Slack::Client.new(token: ENV['SLACK_TOKEN'])
-      @rtm = slack.realtime
+      Slack.configure do |conf|
+        conf.token = ENV['SLACK_TOKEN']
+      end
+      @rtm = Slack::RealTime::Client.new
       @rtm.on(:message) do |m|
         input(m['text'])
       end
@@ -28,7 +30,7 @@ module SlackGame
 
     def listen
       @thread = Thread.new do
-        @rtm.start
+        @rtm.start!
       end
       @thread.run
     end
