@@ -36,11 +36,11 @@ module SlackGame
     end
 
     def input(command)
-      parser = self.class.parsers.find { |p| p.match?(command) }
-      @command = parser.command if parser
+      matched = self.class.parsers.find { |p| p.match?(command) }
+      @command = matched.command if matched
     end
 
-    def take
+    def take_last_command
       command = @command
       @command = nil
       command

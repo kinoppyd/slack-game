@@ -8,14 +8,14 @@ module SlackGame
         @controller = Controller.new
         @canvas = Canvas.new(channel, x, y)
         @position = Position.new(0, 0, 0..9, 0..9)
-        @canvas.matrix[@position.y][@position.x] = Canvas::CHARACTOR
+        @canvas.dot_matrix[@position.y][@position.x] = Canvas::CHARACTOR
         @canvas.draw
       end
 
       def main_loop
         loop{
           begin
-            update(@controller.take)
+            update(@controller.take_last_command)
           rescue => e
             puts "GAME OVER #{e.message}"
             break
@@ -39,10 +39,10 @@ module SlackGame
       def set_position(x, y)
         @position.x = x
         @position.y = y
-        matrix = @canvas.matrix
+        matrix = @canvas.dot_matrix
         matrix = matrix.map { |n| n.map { |d| d == Canvas::CHARACTOR ? Canvas::PAINTED : d } }
         matrix[@position.y][@position.x] = Canvas::CHARACTOR
-        @canvas.matrix = matrix
+        @canvas.dot_matrix = matrix
         @canvas.draw
       end
 

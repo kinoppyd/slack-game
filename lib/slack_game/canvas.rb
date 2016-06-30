@@ -1,7 +1,7 @@
 module SlackGame
   class Canvas
-    attr_reader :channel, :last_update
-    attr_accessor :matrix
+    attr_reader :channel
+    attr_accessor :dot_matrix
 
     def self.inherited(subclass)
       subclass.class_variable_set(:@@dot, {})
@@ -21,34 +21,34 @@ module SlackGame
       end
       @slack = Slack::Web::Client.new
       @channel = resolve_channel(channel)
-      @matrix = y.times.inject([]) { |acc| acc << Array.new(x) }
+      @dot_matrix = y.times.inject([]) { |acc| acc << Array.new(x) }
     end
 
     def draw
-      encoded_matrix = encode(matrix)
-      result = if last_update
-        @slack.chat_update(ts: last_update, channel: channel, text: encoded_matrix)
+      emoji_matrix = dot2emoji(dot_matrix)
+      result = if @last_update
+        @slack.chat_update(ts: @last_update, channel: channel, text: emoji_matrix)
       else
-        @slack.chat_postMessage(channel: channel, text: encoded_matrix, as_user: true)
+        @slack.chat_postMessage(channel: channel, text: emoji_matrix, as_user: true)
       end
       @last_update = result['ok'] ? result['ts'] : raise
     end
 
     private
 
-    def encode(matrix)
-      encoded = matrix.map { |l| line_encode(l) }
-      encoded.join("\n")
+    def dot2emoji(matrix)
+      converted_lines = matrix.map { |l| line_convert(l) }
+      converted_lines.join("\n")
     end
 
-    def line_encode(line)
-      encoded_line = line.map do |t|
-        dot_emoji(t)
+    def line_convert(line)
+      converted = line.map do |t|
+        convert(t)
       end
-      encoded_line.join
+      converted.join
     end
 
-    def dot_emoji(id)
+    def convert(id)
       self.class.dot_map[id] || ENV['DEFAULT_SPACER'] || ':spacer:'
     end
 
