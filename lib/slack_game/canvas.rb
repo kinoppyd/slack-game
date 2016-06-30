@@ -16,9 +16,6 @@ module SlackGame
     end
 
     def initialize(channel, x, y)
-      Slack.configure do |conf|
-        conf.token = ENV['SLACK_TOKEN']
-      end
       @slack = Slack::Web::Client.new
       @channel = resolve_channel(channel)
       @dot_matrix = y.times.inject([]) { |acc| acc << Array.new(x) }

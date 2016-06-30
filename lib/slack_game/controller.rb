@@ -19,9 +19,6 @@ module SlackGame
     end
 
     def init
-      Slack.configure do |conf|
-        conf.token = ENV['SLACK_TOKEN']
-      end
       @rtm = Slack::RealTime::Client.new
       @rtm.on(:message) { |m| input(m['text']) }
     end
