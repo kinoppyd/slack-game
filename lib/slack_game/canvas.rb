@@ -37,15 +37,11 @@ module SlackGame
     private
 
     def dot2emoji(matrix)
-      converted_lines = matrix.map { |l| line_convert(l) }
-      converted_lines.join("\n")
+      matrix.map { |l| line_convert(l) }.join("\n")
     end
 
     def line_convert(line)
-      converted = line.map do |t|
-        convert(t)
-      end
-      converted.join
+      line.map { |t| convert(t) }.join
     end
 
     def convert(id)

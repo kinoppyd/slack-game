@@ -23,9 +23,7 @@ module SlackGame
         conf.token = ENV['SLACK_TOKEN']
       end
       @rtm = Slack::RealTime::Client.new
-      @rtm.on(:message) do |m|
-        input(m['text'])
-      end
+      @rtm.on(:message) { |m| input(m['text']) }
     end
 
     def listen
