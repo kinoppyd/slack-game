@@ -11,6 +11,10 @@ module SlackGame
         command LEFT, /l/
         command DOWN, /d/
         command UP, /u/
+        reaction RIGHT, 'point_right'
+        reaction LEFT, 'point_left'
+        reaction DOWN, 'point_down'
+        reaction UP, 'point_up'
       end
     end
   end
