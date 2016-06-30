@@ -9,7 +9,7 @@ module SlackGame
         @canvas = Canvas.new(channel, x, y)
         @position = Position.new(0, 0, 0..9, 0..9)
         @canvas.dot_matrix[@position.y][@position.x] = Canvas::CHARACTOR
-        @canvas.draw
+        @canvas.draw(@controller.parsers)
       end
 
       def main_loop

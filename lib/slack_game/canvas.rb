@@ -21,12 +21,18 @@ module SlackGame
       @dot_matrix = y.times.inject([]) { |acc| acc << Array.new(x) }
     end
 
-    def draw
+    def draw(parsers = nil)
       emoji_matrix = dot2emoji(dot_matrix)
       result = if @last_update
         @slack.chat_update(ts: @last_update, channel: channel, text: emoji_matrix)
       else
-        @slack.chat_postMessage(channel: channel, text: emoji_matrix, as_user: true)
+        posted = @slack.chat_postMessage(channel: channel, text: emoji_matrix, as_user: true)
+        if parsers
+          Array(parsers).select { |p| p.instance_of?(SlackGame::Controller::ReactionParser) }.each do |parser|
+            @slack.reactions_add(name: parser.emoji, channel: channel, timestamp: posted['ts'])
+          end
+        end
+        posted
       end
       @last_update = result['ok'] ? result['ts'] : raise
     end
