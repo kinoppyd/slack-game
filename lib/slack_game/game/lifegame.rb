@@ -6,7 +6,7 @@ module SlackGame
       def initialize(channel, size = 10)
         @canvas = Canvas.new(channel, size, size)
         @field = Field.new(size)
-        @canvas.matrix = @field.to_display
+        @canvas.dot_matrix = @field.to_display
         @canvas.draw
       end
 
@@ -22,7 +22,7 @@ module SlackGame
       end
 
       def update
-        @canvas.matrix = @field.next.to_display
+        @canvas.dot_matrix = @field.next.to_display
         @canvas.draw
       end
 
